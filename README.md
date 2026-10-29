@@ -3,6 +3,7 @@
 a small network explorer. make a graph (or paste your own edge list), then knock out one node at a time and see what gets cut off from the largest group.
 
 - **live:** https://ghost-map-kappa.vercel.app
+- **itch.io (free to play in the browser, pay what you want):** https://jimmyburrow48.itch.io/ghost-map
 - **no dependencies.** plain javascript in the browser, node for the checks.
 - **deterministic.** the same seed gives the same graph and the same layout.
 
