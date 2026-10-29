@@ -39,6 +39,23 @@ the zachary karate club (1977): 34 members of a university karate club and 78 fr
 - `node checks/stranger-check.js` and `python -I checks/stranger-verify.py` (networkx): the karate club numbers. the python script recomputes the races and knock-outs with its own code and reports MATCH with the page code.
 
 ## sparse-claim test (m6, real networks)
-- checks/sparse-test.py: the claim "the most-linked node is often not the top cut node" on real sparse networks (average links below 3). rule written before the data was collected.
-- result: 10 eligible networks, the claim holds on 8 (80 percent, rule says supported at 60). the two failures are florentine families (15 nodes) and sandi authors (86 nodes).
+- the claim: "the most-linked node is often not the top cut node", tested on real networks with average links below 3. the rule was written before the data was collected: a network "holds" when no most-linked node (ties included) reaches the top cut node, and the claim is supported when at least 60 percent of eligible networks hold.
+- result: 10 eligible networks, the claim holds on 8 (80 percent). the two failures are florentine families (15 nodes) and sandi authors (86 nodes).
+- control: each network is also rewired 20 times with the degree of every node kept (checks/sparse-test.py, seeds 1 to 20). this is diagnostic only, not part of the rule.
+
+| network | nodes | avg links | holds | rewired control (holds in n of 20) |
+| --- | --- | --- | --- | --- |
+| florentine families | 15 | 2.67 | no | 8 |
+| us power grid | 4941 | 2.67 | yes | 20 |
+| euroroad | 1174 | 2.41 | yes | 20 |
+| minnesota roads | 2642 | 2.50 | yes | 20 |
+| 494-bus power system | 494 | 2.37 | yes | 20 |
+| 662-bus power system | 662 | 2.74 | yes | 20 |
+| 1138-bus power system | 1138 | 2.56 | yes | 17 |
+| western us power network | 1723 | 2.78 | yes | 20 |
+| sandi authors | 86 | 2.88 | no | 12 |
+| erdos collaboration (Erdos992) | 5094 | 2.95 | yes | 15 |
+
+- what the control says: on all 8 networks that hold, the degree-preserving rewires also hold in 15 to 20 of 20 runs. so the claim mostly follows from the degree pattern of sparse graphs. it does not show that real networks are special. the two failures hold in 8 and 12 of 20 rewires, so they are not clearly different from shuffled graphs either. with 15 and 86 nodes this test is weak.
 - not a claim about all sparse networks. five of the ten are power systems. output: checks/sparse-test-out.json. sources: data/raw (the UF sparse matrix collection, via nrvis.com).
+- the page is unchanged by this test.
