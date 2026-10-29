@@ -1,0 +1,6 @@
+fraction of rewiring | seeds connected | gap (most damaging node is not most-linked) | mean spearman(links, cuts) | mean largest cut
+0.00 | 200/200 | 177/200 | 0.175 | 2.19
+0.10 | 183/200 | 158/183 | 0.185 | 1.98
+0.50 | 171/200 | 142/171 | 0.175 | 2.04
+1.00 | 175/200 | 156/175 | 0.187 | 2.03
+at 0 rewiring: 39.3 links between clusters per graph (before the join step adds any); the most damaging nodes touch a between-cluster link in 442 of 586 cases (75%), while 55% of all nodes do.

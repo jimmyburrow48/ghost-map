@@ -1,0 +1,4 @@
+pIn 0.06 | avg links 2.5 | seeds with a cut 200/200 | gap 155/200 | mean max cut 8.23
+pIn 0.12 | avg links 3.7 | seeds with a cut 200/200 | gap 177/200 | mean max cut 2.19
+pIn 0.25 | avg links 6.8 | seeds with a cut 61/200 | gap 58/61 | mean max cut 0.30
+pIn 0.4 | avg links 10.4 | seeds with a cut 1/200 | gap 0/1 | mean max cut 0.01

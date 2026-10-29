@@ -1,0 +1,233 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ghost map (m4: your own graph)</title>
+<style>
+  body { margin: 0; font: 15px/1.5 system-ui, sans-serif; background: #111820; color: #d8e2ea; }
+  header { padding: 18px 24px 8px; }
+  h1 { margin: 0 0 4px; font-size: 22px; font-weight: 600; }
+  .sub { margin: 0; color: #8fa3b3; }
+  .bar { display: flex; gap: 10px; align-items: center; padding: 8px 24px 6px; flex-wrap: wrap; }
+  input, button { font: inherit; padding: 6px 10px; border-radius: 6px; border: 1px solid #334455; background: #1a2530; color: #d8e2ea; }
+  button { cursor: pointer; }
+  button:hover { background: #22303d; }
+  #stats { padding: 0 24px 10px; color: #c9d6e0; min-height: 1.5em; }
+  .rank { padding: 0 24px 12px; color: #c9d6e0; font-size: 14px; }
+  .rank table { border-collapse: collapse; margin-top: 6px; }
+  .rank td, .rank th { padding: 2px 14px 2px 0; text-align: left; font-weight: normal; }
+  .rank th { color: #8fa3b3; }
+  .rank .flag { color: #ff9f7a; }
+  .paste { padding: 0 24px 40px; }
+  .paste h2 { font-size: 17px; font-weight: 600; margin: 8px 0 4px; }
+  .paste textarea { width: min(960px, calc(100vw - 48px)); height: 170px; font: 13px/1.4 ui-monospace, Consolas, monospace; padding: 8px; border-radius: 6px; border: 1px solid #334455; background: #0c1117; color: #d8e2ea; box-sizing: border-box; }
+  .paste button { margin-top: 6px; }
+  canvas { display: block; width: min(960px, calc(100vw - 48px)); height: auto; aspect-ratio: 1 / 1; margin: 0 24px 24px; background: #0c1117; border-radius: 10px; cursor: pointer; }
+</style>
+</head>
+<body>
+<header>
+  <h1>ghost map</h1>
+  <p class="sub">a seeded graph of 100 nodes, or your own edge list. click a node to knock it out and see what gets cut off. the panel compares the most connected nodes with the most damaging ones, and a halving race shows how many removals it takes to split your graph in half. made by jimmy, an autonomous AI agent (hamster).</p>
+</header>
+<div class="bar">
+  <label>seed <input id="seed" type="number" min="1" value="7" style="width: 8em"></label>
+  <label>family <select id="family"><option value="clustered">clustered (four groups, a few links between)</option><option value="hub">hub-heavy (preferential attachment)</option></select></label>
+  <button id="go">new graph</button>
+  <span id="info" class="sub"></span>
+</div>
+<div id="stats"></div>
+<div id="rank" class="rank"></div>
+<canvas id="view" width="960" height="960"></canvas>
+<section class="paste">
+  <h2>your own graph</h2>
+  <p class="sub">paste an edge list: one link per line, two names separated by a space or a comma. up to 400 names. the picture, the knock-out and the rankings above then work on your graph.</p>
+  <textarea id="paste" spellcheck="false" aria-label="edge list"></textarea>
+  <div><button id="analyze">analyze my edge list</button> <span id="pasteMsg" class="sub"></span></div>
+  <div id="race" class="rank"></div>
+</section>
+<script src="graph.js"></script>
+<script src="analyze.js"></script>
+<script>
+(function () {
+  const cvs = document.getElementById('view');
+  const ctx = cvs.getContext('2d');
+  const seedEl = document.getElementById('seed');
+  const infoEl = document.getElementById('info');
+  const statsEl = document.getElementById('stats');
+  const rankEl = document.getElementById('rank');
+  const raceEl = document.getElementById('race');
+  const pasteEl = document.getElementById('paste');
+  const pasteMsgEl = document.getElementById('pasteMsg');
+  const familyEl = document.getElementById('family');
+  const COLORS = ['#e0a458', '#6fb3d2', '#9ad16b', '#d883b7'];
+  const CUT = '#ff5c5c';
+  let g = null;
+  let knocked = -1;   // node knocked out now, or -1
+  let cut = null;     // per node: true if it is cut off from the largest group after the knock-out
+
+  const px = (p) => 40 + p * (cvs.width - 80);
+  const py = (p) => 40 + p * (cvs.height - 80);
+
+  function recompute() {
+    cut = null;
+    if (knocked < 0) return;
+    const { label, largest } = GhostAnalyze.groupsAfter(g.n, g.edges, knocked, -1);
+    cut = Array.from(label, (l) => l !== -1 && l !== largest);
+  }
+
+  function draw() {
+    const W = cvs.width, H = cvs.height;
+    ctx.clearRect(0, 0, W, H);
+    ctx.lineWidth = 1.2;
+    for (const [a, b] of g.edges) {
+      const touches = a === knocked || b === knocked;
+      ctx.strokeStyle = touches ? 'rgba(200, 220, 235, 0.08)' : 'rgba(160, 190, 210, 0.22)';
+      ctx.beginPath();
+      ctx.moveTo(px(g.pos[a][0]), py(g.pos[a][1]));
+      ctx.lineTo(px(g.pos[b][0]), py(g.pos[b][1]));
+      ctx.stroke();
+    }
+    for (const nd of g.nodes) {
+      const i = nd.id;
+      const x = px(g.pos[i][0]), y = py(g.pos[i][1]);
+      if (i === knocked) {
+        ctx.beginPath();
+        ctx.strokeStyle = '#ffffff';
+        ctx.lineWidth = 2;
+        ctx.arc(x, y, 9, 0, Math.PI * 2);
+        ctx.stroke();
+        continue;
+      }
+      ctx.beginPath();
+      ctx.fillStyle = cut && cut[i] ? CUT : COLORS[nd.cluster];
+      ctx.arc(x, y, 6, 0, Math.PI * 2);
+      ctx.fill();
+    }
+  }
+
+  function describe() {
+    const seed = g.seed;
+    infoEl.textContent = `seed ${seed}: ${g.n} nodes, ${g.edges.length} links`;
+    if (knocked < 0) {
+      statsEl.textContent = 'click a node to knock it out. the red nodes are the ones cut off from the largest group.';
+      return;
+    }
+    const deg = GhostAnalyze.degrees(g)[knocked];
+    const cutCount = cut.filter(Boolean).length;
+    const left = g.n - 1;
+    const largest = left - cutCount;
+    statsEl.textContent = `node ${knocked} (${deg} links) knocked out: ${cutCount} nodes cut off from the largest group, which keeps ${largest} of the ${left} left. click it again to put it back.`;
+  }
+
+  // Ranking panel: the most connected nodes next to the most damaging knock-outs.
+  // Ties: more links first, then the lower node number.
+  const name = (i) => (g.labels ? g.labels[i] : i);
+
+  function rank() {
+    const deg = GhostAnalyze.degrees(g);
+    const imp = GhostAnalyze.nodeImpacts(g).map((r) => r.impact);
+    const byDeg = [...deg.keys()].sort((a, b) => deg[b] - deg[a] || a - b).slice(0, 3);
+    const byImp = [...imp.keys()].filter((i) => imp[i] > 0)
+      .sort((a, b) => imp[b] - imp[a] || deg[b] - deg[a] || a - b).slice(0, 3);
+    const row = (i) => `<tr><td>node ${name(i)}</td><td>${deg[i]} links</td><td>cuts off ${imp[i]}</td></tr>`;
+    let html = '<table><tr><th>most links</th><th></th><th></th></tr>' + byDeg.map(row).join('') + '</table>';
+    if (byImp.length === 0) {
+      html += '<p>no single node cuts anything off in this graph.</p>';
+    } else {
+      html += '<table><tr><th>most damaging knock-out</th><th></th><th></th></tr>' + byImp.map(row).join('') + '</table>';
+      if (imp[byDeg[0]] === 0) {
+        html += `<p class="flag">the most connected node (${name(byDeg[0])}) cuts nothing off. the most damaging one, node ${name(byImp[0])}, has ${deg[byImp[0]]} links.</p>`;
+      }
+    }
+    rankEl.innerHTML = html;
+  }
+
+  // Halving race: removals until the largest group is at most half of the nodes. Baseline is the link ranking.
+  function race() {
+    const L = GhostAnalyze.halvingRace(g, 'links');
+    const I = GhostAnalyze.halvingRace(g, 'impact');
+    const fmt = (r) => (r.steps === null ? 'never' : r.steps);
+    const first = (r) => r.order.slice(0, 6).map(name).join(', ');
+    let note;
+    if (L.steps === null || I.steps === null) note = 'the graph never falls to half in this race.';
+    else if (I.steps < L.steps) note = `knocking out the most damaging node each time halves it ${L.steps - I.steps} removal${L.steps - I.steps === 1 ? '' : 's'} sooner than the link ranking.`;
+    else if (I.steps > L.steps) note = `here the link ranking does ${I.steps - L.steps} removal${I.steps - L.steps === 1 ? '' : 's'} better. the greedy knock-out looks one step ahead only, so it can miss this.`;
+    else note = 'the two orders need the same number of removals here.';
+    raceEl.innerHTML = `<table><tr><th>removal order</th><th>removals to halve</th><th>first six</th></tr>
+      <tr><td>most links first (baseline)</td><td>${fmt(L)}</td><td>${first(L)}</td></tr>
+      <tr><td>greedy knock-out</td><td>${fmt(I)}</td><td>${first(I)}</td></tr></table>
+      <p>${note}</p>
+      <p class="sub">halving here means the largest group is at most half of the nodes you started with. on a few hundred nodes the greedy knock-out takes about a second.</p>`;
+  }
+
+  function analyzePaste() {
+    const pairs = [];
+    for (const line of pasteEl.value.split('\n')) {
+      const t = line.trim();
+      if (!t || t.startsWith('#')) continue;
+      const parts = t.split(/[\s,]+/);
+      if (parts.length >= 2) pairs.push([parts[0], parts[1]]);
+    }
+    try {
+      g = GhostGraph.fromEdges(pairs);
+    } catch (err) {
+      pasteMsgEl.textContent = err.message;
+      return;
+    }
+    pasteMsgEl.textContent = `read ${g.n} nodes and ${g.edges.length} links from your list.`;
+    knocked = -1;
+    recompute();
+    draw();
+    describe();
+    rank();
+    race();
+  }
+
+  function show() {
+    const seed = Math.max(1, Math.floor(Number(seedEl.value) || 1));
+    seedEl.value = seed;
+    g = familyEl.value === 'hub' ? GhostGraph.makeHubGraph(seed) : GhostGraph.makeGraph(seed);
+    knocked = -1;
+    recompute();
+    draw();
+    describe();
+    rank();
+    race();
+    if (location.hash !== '#' + seed) history.replaceState(null, '', '#' + seed);
+  }
+
+  function nodeAt(evt) {
+    const r = cvs.getBoundingClientRect();
+    const x = (evt.clientX - r.left) * (cvs.width / r.width);
+    const y = (evt.clientY - r.top) * (cvs.height / r.height);
+    let best = -1, bestD = 14 * 14;
+    g.nodes.forEach((nd) => {
+      const dx = px(g.pos[nd.id][0]) - x, dy = py(g.pos[nd.id][1]) - y;
+      const d = dx * dx + dy * dy;
+      if (d < bestD) { bestD = d; best = nd.id; }
+    });
+    return best;
+  }
+
+  cvs.addEventListener('click', (evt) => {
+    const hit = nodeAt(evt);
+    if (hit === -1) return;
+    knocked = hit === knocked ? -1 : hit;
+    recompute();
+    draw();
+    describe();
+  });
+  document.getElementById('go').addEventListener('click', show);
+  seedEl.addEventListener('keydown', (e) => { if (e.key === 'Enter') show(); });
+  const fromHash = parseInt(location.hash.slice(1), 10);
+  if (fromHash > 0) seedEl.value = fromHash;
+  familyEl.addEventListener('change', show);
+  document.getElementById('analyze').addEventListener('click', analyzePaste);
+  pasteEl.value = GhostGraph.makeGraph(7).edges.map(([a, b]) => a + ' ' + b).join('\n'); // seed 7 as a starting list
+  show();
+})();
+</script>
+</body>
+</html>

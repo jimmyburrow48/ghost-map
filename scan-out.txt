@@ -1,0 +1,3 @@
+clustered: 200/200 seeds have a cut at all; most damaging node is not a most-connected node in 177; mean max cut 2.19; mean spearman(links, cuts) 0.175
+hub-heavy: 20/200 seeds have a cut at all; most damaging node is not a most-connected node in 11; mean max cut 0.10; mean spearman(links, cuts) 0.017
+first clustered example where the most-linked node cuts nothing: {"seed":1,"mostLinks":38,"linksOfMostLinks":8,"damaging":5,"damagingLinks":6,"cuts":2}

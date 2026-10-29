@@ -1,0 +1,2 @@
+clustered: both halved in 100/100 seeds; impact needs fewer removals in 83, same in 8, more in 9; mean removals by links 24.78, by impact 21.70; median gap 3; never halved: links 0, impact 0
+hub-heavy: both halved in 100/100 seeds; impact needs fewer removals in 42, same in 23, more in 35; mean removals by links 12.98, by impact 12.85; median gap 0; never halved: links 0, impact 0
