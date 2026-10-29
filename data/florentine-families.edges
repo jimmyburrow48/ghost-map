@@ -1,0 +1,23 @@
+# Florentine families (Breiger and Pattison 1986, Social Networks 8(3): 215-256), as bundled in networkx.
+# marriage and business ties, unweighted, 15 families, 20 links. exported by checks/export-florentine.py.
+# node ids: 0=Acciaiuoli, 1=Albizzi, 2=Barbadori, 3=Bischeri, 4=Castellani, 5=Ginori, 6=Guadagni, 7=Lamberteschi, 8=Medici, 9=Pazzi, 10=Peruzzi, 11=Ridolfi, 12=Salviati, 13=Strozzi, 14=Tornabuoni
+0 8
+1 5
+1 6
+3 6
+2 4
+4 10
+4 13
+6 7
+1 8
+2 8
+8 11
+8 12
+8 14
+3 10
+10 13
+11 14
+9 12
+3 13
+11 13
+6 14

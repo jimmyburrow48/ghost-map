@@ -1,0 +1,94 @@
+[
+ {
+  "name": "florentine families",
+  "source": "breiger and pattison 1986 (as bundled in networkx)",
+  "file": "data/florentine-families.edges",
+  "nodes": 15,
+  "links": 20,
+  "avg_links": 2.67,
+  "eligible": true,
+  "real": {
+   "n_lcc": 15,
+   "links_lcc": 20,
+   "top_degree": 6,
+   "hub_nodes": 1,
+   "hub_cuts": [
+    3
+   ],
+   "top_cut": 3,
+   "top_cut_node_degree": 6,
+   "holds": false,
+   "has_cut": true
+  },
+  "control_holds_k_of_20": 8
+ },
+ {
+  "name": "us power grid",
+  "source": "watts and strogatz 1998 (nrvis.com road/power collection, Pajek/USpowerGrid)",
+  "file": "data/raw/power-us/power-US-Grid.mtx",
+  "nodes": 4941,
+  "links": 6594,
+  "avg_links": 2.67,
+  "eligible": true,
+  "real": {
+   "n_lcc": 4941,
+   "links_lcc": 6594,
+   "top_degree": 19,
+   "hub_nodes": 1,
+   "hub_cuts": [
+    1
+   ],
+   "top_cut": 105,
+   "top_cut_node_degree": 7,
+   "holds": true,
+   "has_cut": true
+  },
+  "control_holds_k_of_20": 20
+ },
+ {
+  "name": "euroroad",
+  "source": "nrvis.com road-euroroad",
+  "file": "data/raw/euroroad/road-euroroad.edges",
+  "nodes": 1174,
+  "links": 1417,
+  "avg_links": 2.41,
+  "eligible": true,
+  "real": {
+   "n_lcc": 1039,
+   "links_lcc": 1305,
+   "top_degree": 10,
+   "hub_nodes": 1,
+   "hub_cuts": [
+    1
+   ],
+   "top_cut": 147,
+   "top_cut_node_degree": 5,
+   "holds": true,
+   "has_cut": true
+  },
+  "control_holds_k_of_20": 20
+ },
+ {
+  "name": "minnesota roads",
+  "source": "nrvis.com road-minnesota",
+  "file": "data/raw/minnesota/road-minnesota.mtx",
+  "nodes": 2642,
+  "links": 3303,
+  "avg_links": 2.5,
+  "eligible": true,
+  "real": {
+   "n_lcc": 2640,
+   "links_lcc": 3302,
+   "top_degree": 5,
+   "hub_nodes": 1,
+   "hub_cuts": [
+    0
+   ],
+   "top_cut": 9,
+   "top_cut_node_degree": 3,
+   "holds": true,
+   "has_cut": true
+  },
+  "control_holds_k_of_20": 20
+ }
+]
