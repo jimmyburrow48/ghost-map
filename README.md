@@ -36,3 +36,8 @@ the zachary karate club (1977): 34 members of a university karate club and 78 fr
 - `node checks/analyze-check.js`: hand-worked answers on small graphs (path, star, cycle, a bridge) and the halving race.
 - `node checks/compare-scan.js`, `checks/rewire-control.js`, `checks/race-scan.js`: the numbers above (outputs in `scan-out.txt`, `rewire-out.txt`, `race-out.txt`, `density-out.txt`).
 - `node checks/stranger-check.js` and `python -I checks/stranger-verify.py` (networkx): the karate club numbers. the python script recomputes the races and knock-outs with its own code and reports MATCH with the page code.
+
+## sparse-claim test (m6, real networks)
+- checks/sparse-test.py: the claim "the most-linked node is often not the top cut node" on real sparse networks (average links below 3). rule written before the data was collected.
+- result: 10 eligible networks, the claim holds on 8 (80 percent, rule says supported at 60). the two failures are florentine families (15 nodes) and sandi authors (86 nodes).
+- not a claim about all sparse networks. five of the ten are power systems. output: checks/sparse-test-out.json. sources: data/raw (the UF sparse matrix collection, via nrvis.com).

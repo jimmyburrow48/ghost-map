@@ -90,5 +90,144 @@
    "has_cut": true
   },
   "control_holds_k_of_20": 20
+ },
+ {
+  "name": "494-bus power system",
+  "source": "UF sparse matrix collection HB/494_bus (Davis), via nrvis.com power-494-bus",
+  "file": "data/raw/nr-power-494-bus/power-494-bus.mtx",
+  "nodes": 494,
+  "links": 586,
+  "avg_links": 2.37,
+  "eligible": true,
+  "real": {
+   "n_lcc": 494,
+   "links_lcc": 586,
+   "top_degree": 9,
+   "hub_nodes": 1,
+   "hub_cuts": [
+    5
+   ],
+   "top_cut": 64,
+   "top_cut_node_degree": 7,
+   "holds": true,
+   "has_cut": true
+  },
+  "control_holds_k_of_20": 20
+ },
+ {
+  "name": "662-bus power system",
+  "source": "UF sparse matrix collection HB/662_bus (Davis), via nrvis.com power-662-bus",
+  "file": "data/raw/nr-power-662-bus/power-662-bus.mtx",
+  "nodes": 662,
+  "links": 906,
+  "avg_links": 2.74,
+  "eligible": true,
+  "real": {
+   "n_lcc": 662,
+   "links_lcc": 906,
+   "top_degree": 9,
+   "hub_nodes": 2,
+   "hub_cuts": [
+    1,
+    2
+   ],
+   "top_cut": 3,
+   "top_cut_node_degree": 7,
+   "holds": true,
+   "has_cut": true
+  },
+  "control_holds_k_of_20": 20
+ },
+ {
+  "name": "1138-bus power system",
+  "source": "UF sparse matrix collection HB/1138_bus (Davis), via nrvis.com power-1138-bus",
+  "file": "data/raw/nr-power-1138-bus/power-1138-bus.mtx",
+  "nodes": 1138,
+  "links": 1458,
+  "avg_links": 2.56,
+  "eligible": true,
+  "real": {
+   "n_lcc": 1138,
+   "links_lcc": 1458,
+   "top_degree": 17,
+   "hub_nodes": 1,
+   "hub_cuts": [
+    0
+   ],
+   "top_cut": 50,
+   "top_cut_node_degree": 3,
+   "holds": true,
+   "has_cut": true
+  },
+  "control_holds_k_of_20": 17
+ },
+ {
+  "name": "western us power network",
+  "source": "UF sparse matrix collection HB/bcspwr09 (Dembart and Lewis 1981), via nrvis.com power-bcspwr09",
+  "file": "data/raw/nr-bcspwr02/power-bcspwr09.mtx",
+  "nodes": 1723,
+  "links": 2394,
+  "avg_links": 2.78,
+  "eligible": true,
+  "real": {
+   "n_lcc": 1723,
+   "links_lcc": 2394,
+   "top_degree": 14,
+   "hub_nodes": 1,
+   "hub_cuts": [
+    6
+   ],
+   "top_cut": 19,
+   "top_cut_node_degree": 11,
+   "holds": true,
+   "has_cut": true
+  },
+  "control_holds_k_of_20": 20
+ },
+ {
+  "name": "sandi authors",
+  "source": "UF sparse matrix collection Pajek/Sandi_authors (co-authorship), via nrvis.com misc",
+  "file": "data/raw/nr-misc-Sandi-authors/Sandi_authors.mtx",
+  "nodes": 86,
+  "links": 124,
+  "avg_links": 2.88,
+  "eligible": true,
+  "real": {
+   "n_lcc": 86,
+   "links_lcc": 124,
+   "top_degree": 12,
+   "hub_nodes": 1,
+   "hub_cuts": [
+    17
+   ],
+   "top_cut": 17,
+   "top_cut_node_degree": 12,
+   "holds": false,
+   "has_cut": true
+  },
+  "control_holds_k_of_20": 12
+ },
+ {
+  "name": "erdos collaboration (Erdos992)",
+  "source": "UF sparse matrix collection Pajek/Erdos992 (Erdos collaboration), via nrvis.com misc",
+  "file": "data/raw/nr-misc-Erdos992/Erdos992.mtx",
+  "nodes": 5094,
+  "links": 7515,
+  "avg_links": 2.95,
+  "eligible": true,
+  "real": {
+   "n_lcc": 4991,
+   "links_lcc": 7428,
+   "top_degree": 61,
+   "hub_nodes": 1,
+   "hub_cuts": [
+    26
+   ],
+   "top_cut": 39,
+   "top_cut_node_degree": 22,
+   "holds": true,
+   "has_cut": true
+  },
+  "control_holds_k_of_20": 15
  }
 ]

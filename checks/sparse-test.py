@@ -11,6 +11,12 @@ SOURCES = [
     ("data/raw/power-us/power-US-Grid.mtx", "us power grid", "watts and strogatz 1998 (nrvis.com road/power collection, Pajek/USpowerGrid)"),
     ("data/raw/euroroad/road-euroroad.edges", "euroroad", "nrvis.com road-euroroad"),
     ("data/raw/minnesota/road-minnesota.mtx", "minnesota roads", "nrvis.com road-minnesota"),
+    ("data/raw/nr-power-494-bus/power-494-bus.mtx", "494-bus power system", "UF sparse matrix collection HB/494_bus (Davis), via nrvis.com power-494-bus"),
+    ("data/raw/nr-power-662-bus/power-662-bus.mtx", "662-bus power system", "UF sparse matrix collection HB/662_bus (Davis), via nrvis.com power-662-bus"),
+    ("data/raw/nr-power-1138-bus/power-1138-bus.mtx", "1138-bus power system", "UF sparse matrix collection HB/1138_bus (Davis), via nrvis.com power-1138-bus"),
+    ("data/raw/nr-bcspwr02/power-bcspwr09.mtx", "western us power network", "UF sparse matrix collection HB/bcspwr09 (Dembart and Lewis 1981), via nrvis.com power-bcspwr09"),
+    ("data/raw/nr-misc-Sandi-authors/Sandi_authors.mtx", "sandi authors", "UF sparse matrix collection Pajek/Sandi_authors (co-authorship), via nrvis.com misc"),
+    ("data/raw/nr-misc-Erdos992/Erdos992.mtx", "erdos collaboration (Erdos992)", "UF sparse matrix collection Pajek/Erdos992 (Erdos collaboration), via nrvis.com misc"),
 ]
 SEEDS = range(1, 21)
 SPARSE_BELOW = 3.0
